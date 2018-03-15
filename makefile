@@ -1,4 +1,4 @@
-docker_name = laravel_5.5
+docker_name = my-php-fpm
 docker_image = laravel_skeleton:5.5
 
 help: #prints list of commands

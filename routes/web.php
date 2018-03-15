@@ -16,5 +16,5 @@ Route::get('/', function () {
 });*/
 
 Route::resource('/', 'IndexController',[
-        'only'=>['index']
+        'only'=>['index'], 'names'=>['index'=>'home']
     ]);
