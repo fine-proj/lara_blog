@@ -9,4 +9,9 @@ class Portfolio extends Model
     protected $fillable = [
         'title', 'text', 'customer', 'alias', 'img', 'filter_alias',
     ];
+
+    public function filter()
+    {
+        return $this->belongsTo('Corp\Filter', 'filter_alias', 'alias');
+    }
 }
