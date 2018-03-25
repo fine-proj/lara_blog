@@ -2,10 +2,26 @@
 
 namespace Corp\Http\Controllers;
 
+use Corp\Repositories\ArticlesRepository;
+use Corp\Repositories\PortfoliosRepository;
+use Corp\Repositories\SlidersRepository;
 use Illuminate\Http\Request;
+use Corp\Repositories\MenusRepository;
+use Corp\Menu;
+use Illuminate\Support\Facades\Config;
 
-class IndexController extends Controller
+class IndexController extends SiteController
 {
+    public function __construct(SlidersRepository $rep, PortfoliosRepository $prep, ArticlesRepository $arep)
+    {
+        parent::__construct(new MenusRepository(new Menu()));
+        $this->p_rep = $prep;
+        $this->s_rep = $rep;
+        $this->a_rep = $arep;
+        $this->bar = 'right';
+        $this->template = env('THEME')  .  '.index';
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +29,48 @@ class IndexController extends Controller
      */
     public function index()
     {
-        echo 'Hello';
+        $sliderItems = $this->getSliders();
+        $sliders = view(env('THEME') . '.slider')->with('sliders', $sliderItems)->render();
+        $this->vars['sliders'] = $sliders;
+
+        $portfolio = $this->getPortfolio();
+        $content = view(env('THEME') . '.content')->with('portfolios', $portfolio)->render();
+        $this->vars['content'] = $content;
+
+        $articles = $this->getArticles();
+        $this->contentRightBar = view(env('THEME') . '.indexBar')->with('articles', $articles)->render();
+
+        $this->keywords = "Home page";
+        $this->meta_desc = "Home page";
+        $this->title = "Home page";
+
+        return $this->renderOutput();
+    }
+
+    public function getSliders()
+    {
+        $sliders = $this->s_rep->get();
+
+        if($sliders->isEmpty()){
+            return FALSE;
+        }
+        $sliders->transform(function ($item, $key){
+            $item->img = Config::get('settings.slider_path') . '/' . $item->img;
+            return $item;
+        });
+        //dd($sliders);
+        return $sliders;
+    }
+
+    protected function getPortfolio()
+    {
+        $portfolio = $this->p_rep->get('*', Config::get('settings.home_port_count'));
+        return $portfolio;
+    }
+
+    protected function getArticles()
+    {   $articles = $this->a_rep->get(['title', 'created_at', 'img', 'alias'], Config::get('settings.home_articles_count'));
+        return $articles;
     }
 
     /**
