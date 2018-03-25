@@ -38,8 +38,11 @@ class IndexController extends SiteController
         $this->vars['content'] = $content;
 
         $articles = $this->getArticles();
-        //dd($articles);
         $this->contentRightBar = view(env('THEME') . '.indexBar')->with('articles', $articles)->render();
+
+        $this->keywords = "Home page";
+        $this->meta_desc = "Home page";
+        $this->title = "Home page";
 
         return $this->renderOutput();
     }

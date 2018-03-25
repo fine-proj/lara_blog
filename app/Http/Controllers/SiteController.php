@@ -17,9 +17,13 @@ class SiteController extends Controller{
 
     protected $vars = [];
 
-    protected $bar;
+    protected $bar = 'no';
     protected $contentLeftBar;
     protected $contentRightBar;
+
+    protected $keywords;
+    protected $meta_desc;
+    protected $title;
 
     public function __construct(MenusRepository $m){
         $this->m_rep = $m;
@@ -37,6 +41,15 @@ class SiteController extends Controller{
             $rightBar = view(env('THEME') . '.rightBar')->with('content_rightBar',$this->contentRightBar)->render();
             $this->vars['rightBar'] = $rightBar;
         }
+
+        $this->vars['bar'] = $this->bar;
+
+        $footer = view(env('THEME') . '.footer')->render();
+        $this->vars['footer'] = $footer;
+
+        $this->vars['keywords'] =  $this->keywords;
+        $this->vars['meta_desc'] =  $this->meta_desc;
+        $this->vars['title'] =  $this->title;
 
         return view($this->template)->with($this->vars);
     }

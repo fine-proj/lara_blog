@@ -22,6 +22,9 @@ composer_dump: #update vendors
 set_env: #set default environments
 	@cp ./.env.example ./.env
 
+install_mc: #install mc#
+	@sudo docker exec -it $(docker_name) bash -c 'apt-get update && apt-get install -y mc'
+
 create_controller: #create controller name=[controllerName]
 	@sudo docker exec -it $(docker_name) bash -c 'php artisan make:controller $(name) && chmod -R 777 .'
 
