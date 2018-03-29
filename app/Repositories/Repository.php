@@ -7,11 +7,15 @@ abstract class Repository
 {
     protected $model = FALSE;
 
-    public function get($sel='*', $tak=FALSE)
+    public function get($sel='*', $tak=FALSE, $pagination=FALSE)
     {
         $builder = $this->model->select($sel);
         if($tak){
             $builder->take($tak);
+        }
+        if($pagination)
+        {
+            return $this->check($builder->paginate(Config::get('settings.paginate')));
         }
         return $this->check($builder->get());
     }

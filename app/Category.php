@@ -9,4 +9,9 @@ class Category extends Model
     protected $fillable = [
         'title', 'alias', 'parent_id',
     ];
+
+    public function articles()
+    {
+        return $this->hasMany('Corp\Article', 'user_id', 'id');
+    }
 }
