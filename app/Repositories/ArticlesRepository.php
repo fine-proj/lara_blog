@@ -10,4 +10,16 @@ class ArticlesRepository extends Repository
     {
         $this->model = $article;
     }
+
+    public function one($alias, $relation = [])
+    {   $article = parent::one($alias, $relation);
+
+        if($article && !empty($relation))
+        {
+            $article->load('comments');
+            $article->comments->load('user');
+        }
+
+        return $article;
+    }
 }

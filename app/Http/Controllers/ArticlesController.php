@@ -2,6 +2,7 @@
 
 namespace Corp\Http\Controllers;
 
+use Corp\Category;
 use Corp\Repositories\CommentsRepository;
 use Illuminate\Http\Request;
 use Corp\Repositories\ArticlesRepository;
@@ -22,9 +23,9 @@ class ArticlesController extends SiteController
         $this->template = env('THEME')  .  '.articles';
     }
 
-    public function index()
+    public function index($cat_alias=FALSE)
     {
-        $articles = $this->getArticles();
+        $articles = $this->getArticles($cat_alias);
         $content = view(env('THEME') . '.articles_content')->with('articles', $articles)->render();
         $this->vars['content'] = $content;
 
@@ -36,9 +37,36 @@ class ArticlesController extends SiteController
         return $this->renderOutput();
     }
 
+    public function show($alias=FALSE)
+    {
+        $article = $this->a_rep->one($alias, ['comments' => TRUE]);
+        //dd($article);
+
+        if($article){
+            $article->img = json_decode($article->img);
+        }
+        dd($article->comments->groupBy('parent_id'));
+
+        $content = view(env('THEME') . '.article_content')->with('article', $article)->render();
+        $this->vars['content'] = $content;
+
+        $portfolios = $this->getPortfolios(config('settings.recent_portfolios'));
+        $comments = $this->getComments(config('settings.recent_comments'));
+        $this->contentRightBar = view(env('THEME') . '.articlesBar')->with(['portfolios'=>$portfolios, 'comments'=>$comments])->render();
+
+        return $this->renderOutput();
+    }
+
     protected function getArticles($alias = FALSE)
     {
-        $articles = $this->a_rep->get(['title', 'created_at', 'img', 'alias', 'desc', 'user_id', 'category_id', 'id'], false, true);
+        $where = FALSE;
+        if($alias)
+        {
+            $id = Category::select('id')->where('alias', '=' ,$alias)->first()->id;
+            $where = ['category_id', $id];
+        }
+
+        $articles = $this->a_rep->get(['title', 'created_at', 'img', 'alias', 'desc', 'user_id', 'category_id', 'id'], false, true, $where);
         if($articles)
         {
             $articles->load('user', 'category', 'comments');
