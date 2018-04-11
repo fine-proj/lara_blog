@@ -26,6 +26,11 @@ class ArticlesController extends SiteController
     public function index($cat_alias=FALSE)
     {
         $articles = $this->getArticles($cat_alias);
+
+        $this->title = "Blog";
+        $this->keywords = "Blog";
+        $this->meta_desc = "Blog";
+
         $content = view(env('THEME') . '.articles_content')->with('articles', $articles)->render();
         $this->vars['content'] = $content;
 
@@ -40,12 +45,15 @@ class ArticlesController extends SiteController
     public function show($alias=FALSE)
     {
         $article = $this->a_rep->one($alias, ['comments' => TRUE]);
-        //dd($article);
+
+        $this->title = $article->title;
+        $this->keywords = $article->keywords;
+        $this->meta_desc = $article->meta_desc;
 
         if($article){
             $article->img = json_decode($article->img);
         }
-        dd($article->comments->groupBy('parent_id'));
+        //dd($article->comments->groupBy('parent_id'));
 
         $content = view(env('THEME') . '.article_content')->with('article', $article)->render();
         $this->vars['content'] = $content;
@@ -66,7 +74,7 @@ class ArticlesController extends SiteController
             $where = ['category_id', $id];
         }
 
-        $articles = $this->a_rep->get(['title', 'created_at', 'img', 'alias', 'desc', 'user_id', 'category_id', 'id'], false, true, $where);
+        $articles = $this->a_rep->get(['title', 'created_at', 'img', 'alias', 'desc', 'user_id', 'category_id', 'id', 'keywords', 'meta_desc'], false, true, $where);
         if($articles)
         {
             $articles->load('user', 'category', 'comments');

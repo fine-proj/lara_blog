@@ -22,6 +22,8 @@ class ArticlesTableSeeder extends Seeder
             'img' =>  '{"mini":"003-55x55.jpg ","max":"003-816x282.jpg ","path":"0081-700x345.jpg"}',
             'user_id' =>  '1',
             'category_id' =>  '1',
+            'keywords' =>  'Ключ 1',
+            'meta_desc' =>  'Краткое описание 1',
             'created_at' => '2016-03-23 16:55:47',
             'updated_at' => '2016-03-23 16:55:47',
         ]);
@@ -33,6 +35,8 @@ class ArticlesTableSeeder extends Seeder
             'img' =>  '{"mini":"001-55x55.png ","max":"001-816x282.png ","path":"0081-700x345.jpg"}',
             'user_id' =>  '2',
             'category_id' =>  '2',
+            'keywords' =>  'Ключ 2',
+            'meta_desc' =>  'Краткое описание 2',
             'created_at' => '2016-03-23 16:55:47',
             'updated_at' => '2016-03-23 16:55:47',
         ]);
@@ -44,6 +48,8 @@ class ArticlesTableSeeder extends Seeder
             'img' =>  '{"mini":"0037-55x55.jpg ","max":"00212-816x282.jpg ","path":"0081-700x345.jpg"}',
             'user_id' =>  '1',
             'category_id' =>  '3',
+            'keywords' =>  'Ключ 3',
+            'meta_desc' =>  'Краткое описание 3',
             'created_at' => '2016-03-23 16:55:47',
             'updated_at' => '2016-03-23 16:55:47',
         ]);
