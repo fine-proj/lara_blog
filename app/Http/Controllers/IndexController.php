@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Config;
 
 class IndexController extends SiteController
 {
-    public function __construct(SlidersRepository $rep, PortfoliosRepository $prep, ArticlesRepository $arep)
+    public function __construct(SlidersRepository $rep, PortfoliosRepository $prep,ArticlesRepository $arep)
     {
         parent::__construct(new MenusRepository(new Menu()));
         $this->p_rep = $prep;

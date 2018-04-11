@@ -62,6 +62,8 @@ $factory->define(Corp\Article::class, function (Faker $faker) {
         'img' =>  '{"mini":"003-55x55.jpg ","max":"003-816x282.jpg ","path":"0081-700x345.jpg"}',
         'user_id' =>  $faker->numberBetween(1, 5),
         'category_id' =>  $faker->numberBetween(1, 5),
+        'keywords' =>  'Ключ N',
+        'meta_desc' =>  'Краткое описание N',
         'created_at' => $faker->date('Y-m-d', 'now'),
         'updated_at' => $faker->date('Y-m-d', 'now'),
     ];

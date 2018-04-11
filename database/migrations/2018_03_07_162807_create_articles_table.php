@@ -20,6 +20,8 @@ class CreateArticlesTable extends Migration
             $table->text('desc'); //карткое описание
             $table->string('alias',155)->unique(); //псевдоним статьи
             $table->string('img'); //картинка к статье
+            $table->string('keywords'); //метаинформация (ключевые слова) на стр. детального просмотра
+            $table->string('meta_desc'); //метаинформация (краткое описание) на стр. детального просмотра
             $table->timestamps();
         });
     }

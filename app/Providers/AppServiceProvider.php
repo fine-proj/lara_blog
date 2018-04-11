@@ -3,6 +3,7 @@
 namespace Corp\Providers;
 
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('set', function ($str){
             list($var,$value) = explode(',' , $str);
             return "<?php $var = $value; ?>";
+        });
+
+        DB::listen(function ($query){
+           // echo '<h4>'.$query->sql.'</h4>';
         });
     }
 
