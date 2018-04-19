@@ -1,0 +1,1 @@
+<h1>{{ $data['message'] }} Hello from lara</h1>
