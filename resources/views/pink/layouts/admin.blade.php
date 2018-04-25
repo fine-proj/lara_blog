@@ -106,7 +106,6 @@
 
 
 
-
             @yield('content')
 
             <!-- END CONTENT -->

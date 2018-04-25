@@ -73,7 +73,7 @@ class User extends Authenticatable
         }
         else{
             //проверка только одного правила
-            $this->checkOne($permission);
+            return $this->checkOne($permission);
         }
     }
 
@@ -83,7 +83,6 @@ class User extends Authenticatable
         foreach($this->roles as $role){
             foreach($role->permissions as $perm){
                 if(str_is($perm->name, $permission)){
-
                     return true;
                 }
             }
@@ -107,7 +106,7 @@ class User extends Authenticatable
         }
         else{
             //проверка только одной роли
-            $this->checkOneRole($name);
+            return $this->checkOneRole($name);
         }
     }
 

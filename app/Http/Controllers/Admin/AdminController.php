@@ -55,7 +55,7 @@ class AdminController extends \Corp\Http\Controllers\Controller
         $footer = view(env('THEME') . '.admin.footer')->render();
         $this->vars['footer'] = $footer;
 
-        return view('pink.admin.index', $this->vars);//->with($this->vars);
+        return view($this->template, $this->vars);//->with($this->vars);
     }
 
     protected function getMenu(){
