@@ -159,6 +159,7 @@ return [
         // Corp\Providers\BroadcastServiceProvider::class,
         Corp\Providers\EventServiceProvider::class,
         Corp\Providers\RouteServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class ,
 
     ],
 

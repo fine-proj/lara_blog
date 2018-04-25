@@ -35,3 +35,19 @@ Route::resource('/comment', 'CommentController',['only' => ['store'] ]);
 
 Route::match(['get','post'], '/contacts', ['uses'=>'ContactsController@index',
     'as' => 'contacts' ]);
+
+/////////////////////////////////////
+//auth
+Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
+
+Route::post('/login', 'Auth\LoginController@login');
+
+Route::get('/logout', 'Auth\LoginController@logout');
+
+//admin
+Route::group(['prefix'=>'admin', 'as' => 'admin.', 'middleware'=>'auth'], function (){
+    //маршрут главной страницы админки localhost/admin/
+    Route::get('/', ['uses'=>'Admin\IndexController@index', 'as' => 'adminIndex' ]);
+    //маршруты, работающие со статьями в админке localhost/admin/articles...
+    Route::resource('/articles', 'Admin\ArticlesController');
+});

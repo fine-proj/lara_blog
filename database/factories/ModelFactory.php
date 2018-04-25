@@ -14,11 +14,13 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(Corp\User::class, function (Faker $faker) {
+    $name =  $faker->name;
     return [
-        'name' => $faker->name,
+        'name' => $name,
         'email' => $faker->unique()->safeEmail,
         'password' => bcrypt('111'), // secret
         'remember_token' => str_random(10),
+        'login' => $name,
     ];
 });
 
@@ -91,5 +93,31 @@ $factory->define(Corp\Portfolio::class, function (Faker $faker) {
         'filter_alias' =>  function()use($faker){
             return Corp\Filter::find( $faker->numberBetween(1, 3) )->alias;
         },
+    ];
+});
+
+$factory->define(Corp\Role::class, function (Faker $faker) {
+    return [
+        'name' => $faker->unique()->word,
+    ];
+});
+
+$factory->define(Corp\RoleUserRelation::class, function (Faker $faker) {
+    return [
+        'user_id' =>  $faker->numberBetween(1, 5),
+        'role_id' =>  $faker->numberBetween(1, 3),
+    ];
+});
+
+$factory->define(Corp\Permission::class, function (Faker $faker) {
+    return [
+        'name' => $faker->unique()->word,
+    ];
+});
+
+$factory->define(Corp\PermissionRoleRelation::class, function (Faker $faker) {
+    return [
+        'role_id' =>  $faker->numberBetween(1, 3),
+        'permission_id' =>  $faker->numberBetween(1, 7),
     ];
 });
