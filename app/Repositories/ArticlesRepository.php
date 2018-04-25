@@ -16,8 +16,10 @@ class ArticlesRepository extends Repository
 
         if($article && !empty($relation))
         {
-            $article->load('comments');
-            $article->comments->load('user');
+            //$article->load('comments');
+            //$article->comments->load('user');
+            //заменим на одну строку кода
+            $article->load('comments.user');
         }
 
         return $article;

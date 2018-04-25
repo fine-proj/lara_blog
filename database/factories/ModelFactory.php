@@ -95,3 +95,29 @@ $factory->define(Corp\Portfolio::class, function (Faker $faker) {
         },
     ];
 });
+
+$factory->define(Corp\Role::class, function (Faker $faker) {
+    return [
+        'name' => $faker->unique()->word,
+    ];
+});
+
+$factory->define(Corp\RoleUserRelation::class, function (Faker $faker) {
+    return [
+        'user_id' =>  $faker->numberBetween(1, 5),
+        'role_id' =>  $faker->numberBetween(1, 3),
+    ];
+});
+
+$factory->define(Corp\Permission::class, function (Faker $faker) {
+    return [
+        'name' => $faker->unique()->word,
+    ];
+});
+
+$factory->define(Corp\PermissionRoleRelation::class, function (Faker $faker) {
+    return [
+        'role_id' =>  $faker->numberBetween(1, 3),
+        'permission_id' =>  $faker->numberBetween(1, 7),
+    ];
+});

@@ -26,10 +26,19 @@ class AdminController extends \Corp\Http\Controllers\Controller
 
     public function __construct()
     {
-        $this->user = Auth::user();
-        /*if(!$this->user){
+        /*$this->user = Auth::user();
+        if(!$this->user){
             abort(403);
         }*/
+    }
+
+    //использовать в каждом экшкне всех дочерних контроллеров
+    // вместо работы родительского конструктора
+    public function setUser(){
+        $this->user = Auth::user();
+        if(!$this->user){
+            abort(403);
+        }
     }
 
     public function renderOutput(){
