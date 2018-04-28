@@ -2,6 +2,7 @@
 
 namespace Corp\Http\Controllers\Admin;
 
+use Corp\Category;
 use Illuminate\Http\Request;
 use Corp\Http\Controllers\Controller;
 use Corp\Repositories\ArticlesRepository;
@@ -40,6 +41,10 @@ class ArticlesController extends AdminController
         $this->title = 'Менеджер статей';
 
         $articles = $this->getArticles();
+        if($articles)
+        {
+            $articles->load('category');
+        }
         $this->content = view(env('THEME') . '.admin.articles_content')->with('articles', $articles)->render();
 
         return $this->renderOutput();
@@ -52,7 +57,32 @@ class ArticlesController extends AdminController
      */
     public function create()
     {
-        //
+        $this->setUser();
+        if(Gate::denies('save', new \Corp\Article )) {
+            abort(403);
+        }
+
+        $this->title = 'Добавить новую статью';
+
+        $listsCategories = $this->getCategories();
+        $this->content = view(env('THEME') . '.admin.articles_create_content')->with('categories', $listsCategories)->render();
+
+        return $this->renderOutput();
+    }
+
+    protected function getCategories(){
+        $categories = Category::select(['title', 'alias', 'parent_id', 'id'])->get();
+        $lists = [];
+        foreach ($categories as $category){
+            if($category->parent_id == 0){
+                $lists[$category->title] = [];
+            }
+            else{
+                $rootCategory= $categories->where('id' ,1)->first();
+                $lists[$rootCategory->title][$category->id]= $category->title;
+            }
+        }
+        return $lists;
     }
 
     /**
@@ -63,7 +93,7 @@ class ArticlesController extends AdminController
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
