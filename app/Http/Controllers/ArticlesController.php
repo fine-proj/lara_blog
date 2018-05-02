@@ -46,9 +46,14 @@ class ArticlesController extends SiteController
     {
         $article = $this->a_rep->one($alias, ['comments' => TRUE]);
 
-        $this->title = $article->title;
-        $this->keywords = $article->keywords;
-        $this->meta_desc = $article->meta_desc;
+        if(isset($article->id)) {
+            $this->title = $article->title;
+            $this->keywords = $article->keywords;
+            $this->meta_desc = $article->meta_desc;
+        }
+        else{
+
+        }
 
         if($article){
             $article->img = json_decode($article->img);

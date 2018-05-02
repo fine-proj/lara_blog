@@ -6,7 +6,7 @@ use Corp\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
-use Intervention\Image\Facades\Image as Image;
+//use Intervention\Image\Facades\Image as Image;
 
 class ArticlesRepository extends Repository
 {
@@ -60,7 +60,7 @@ class ArticlesRepository extends Repository
                 $obj->max = $str."_max.png";
                 $obj->path = $str.".png";
 
-                $img = Image::make($image);
+              /*  $img = Image::make($image);
                 $img->fit(Config::get('settings.image')['width'],
                     Config::get('settings.image')['height'])->save(public_path().'/'.env('THEME').'/images/articles/'.$obj->path);
 
@@ -69,7 +69,7 @@ class ArticlesRepository extends Repository
 
                 $img->fit(Config::get('settings.articles_img')['mini']['width'],
                     Config::get('settings.articles_img')['mini']['height'])->save(public_path().'/'.env('THEME').'/images/articles/'.$obj->mini);
-
+                */
 
                 $data['img'] = json_encode($obj);
 
@@ -82,5 +82,76 @@ class ArticlesRepository extends Repository
             }
         }
 
+    }
+
+    public function updateArticle($request, $article)
+    {
+        if(Gate::denies('edit', $this->model)) {
+            abort(403);
+        }
+
+        $data = $request->except('_token','image','_method');
+        if(empty($data)) {
+            return array('error' => 'Нет данных');
+        }
+
+        if(empty($data['alias'])) {
+            $data['alias'] = $this->transliterate($data['title']);
+        }
+
+        $result = $this->one($data['alias'],FALSE);
+        if(isset($result->id) && ($result->id != $article->id)) {
+            $request->merge(array('alias' => $data['alias']));
+            $request->flash();
+
+            return ['error' => 'Данный псевдоним уже успользуется'];
+        }
+
+        if($request->hasFile('image')) {
+            $image = $request->file('image');
+            if($image->isValid()) {
+
+                $str = str_random(8);
+
+                $obj = new \stdClass;
+                $obj->mini = $str.'_mini.jpg';
+                $obj->max = $str.'_max.jpg';
+                $obj->path = $str.'.jpg';
+
+                /*$img = Image::make($image);
+
+                $img->fit(Config::get('settings.image')['width'],
+                    Config::get('settings.image')['height'])->save(public_path().'/'.env('THEME').'/images/articles/'.$obj->path);
+
+                $img->fit(Config::get('settings.articles_img')['max']['width'],
+                    Config::get('settings.articles_img')['max']['height'])->save(public_path().'/'.env('THEME').'/images/articles/'.$obj->max);
+
+                $img->fit(Config::get('settings.articles_img')['mini']['width'],
+                    Config::get('settings.articles_img')['mini']['height'])->save(public_path().'/'.env('THEME').'/images/articles/'.$obj->mini);
+                */
+                $data['img'] = json_encode($obj);
+            }
+        }
+
+        $article->fill($data);
+
+        if($article->update()) {
+            return ['status' => 'Материал обновлен'];
+        }
+
+    }
+
+
+    public function deleteArticle($article)
+    {
+        if(Gate::denies('destroy', $article)) {
+            abort(403);
+        }
+
+        $article->comments()->delete();
+
+        if($article->delete()) {
+            return ['status' => 'Материал удален'];
+        }
     }
 }

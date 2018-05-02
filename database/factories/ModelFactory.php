@@ -61,7 +61,7 @@ $factory->define(Corp\Article::class, function (Faker $faker) {
         'text' => $faker->paragraph(7, true),
         'desc' =>  $faker->paragraph(2, true),
         'alias' =>  'article-' . $faker->numberBetween(10, 900),
-        'img' =>  '{"mini":"003-55x55.jpg ","max":"003-816x282.jpg ","path":"0081-700x345.jpg"}',
+        'img' =>  '{"mini":"003-55x55.jpg ","max":"003-816x282.jpg ","path":"003-816x282.jpg"}',
         'user_id' =>  $faker->numberBetween(1, 5),
         'category_id' =>  $faker->numberBetween(1, 5),
         'keywords' =>  'Ключ N',

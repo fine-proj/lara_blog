@@ -2,6 +2,7 @@
 
 namespace Corp\Http\Controllers\Admin;
 
+use Corp\Article;
 use Corp\Category;
 use Corp\Http\Requests\ArticleRequest;
 use Illuminate\Http\Request;
@@ -119,9 +120,21 @@ class ArticlesController extends AdminController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Article $article)
     {
-        //
+        $this->setUser();
+        if(Gate::denies('edit', new \Corp\Article )) {
+            abort(403);
+        }
+
+        $article->img = json_decode($article->img);
+
+        $this->title = 'Редактирование статьи'.$article->title;
+
+        $listsCategories = $this->getCategories();
+        $this->content = view(env('THEME') . '.admin.articles_create_content')->with(['categories'=>$listsCategories, 'article'=>$article])->render();
+
+        return $this->renderOutput();
     }
 
     /**
@@ -131,9 +144,15 @@ class ArticlesController extends AdminController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ArticleRequest $request, Article $article)
     {
-        //
+        $result = $this->a_rep->updateArticle($request, $article);
+
+        if(is_array($result) && !empty($result['error'])) {
+            return back()->with($result);
+        }
+
+        return redirect('/admin')->with($result);
     }
 
     /**
@@ -142,8 +161,12 @@ class ArticlesController extends AdminController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Article $article)
     {
-        //
+        $result = $this->a_rep->deleteArticle($article);
+        if(is_array($result) && !empty($result['error'])) {
+            return back()->with($result);
+        }
+        return redirect('/admin')->with($result);
     }
 }
