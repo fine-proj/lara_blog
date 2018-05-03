@@ -65,7 +65,7 @@ class AdminController extends \Corp\Http\Controllers\Controller
             $m->add('Портфолио', ['route'  => 'admin.articles.index']);
             $m->add('Меню',  ['route'  => 'admin.articles.index']);
             $m->add('Пользователи',  ['route'  => 'admin.articles.index']);
-            $m->add('Привилегии',  ['route'  => 'admin.articles.index']);
+            $m->add('Привилегии',  ['route'  => 'admin.permissions.index']);
         });
     }
 }

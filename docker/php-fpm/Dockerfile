@@ -6,9 +6,18 @@ RUN apt-get update && \
     apt-get install -y supervisor && \
     apt-get install -y libzip-dev && \
     apt-get install -y libpng-dev && \
+    apt-get install -y libjpeg-dev && \
+    apt-get install -y libfreetype6-dev && \
     apt-get -y install git && \
-    docker-php-ext-install pdo pdo_mysql gd mbstring zip xml && \
-    apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+    docker-php-ext-install pdo pdo_mysql mbstring zip
+
+RUN docker-php-ext-configure gd \
+        --enable-gd-native-ttf \
+        --with-jpeg-dir=/usr/lib \
+        --with-freetype-dir=/usr/include/freetype2 && \
+    docker-php-ext-install gd
+
+RUN apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 COPY ./ /application
 
