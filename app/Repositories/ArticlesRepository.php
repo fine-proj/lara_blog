@@ -6,7 +6,7 @@ use Corp\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
-//use Intervention\Image\Facades\Image as Image;
+use Intervention\Image\Facades\Image as Image;
 
 class ArticlesRepository extends Repository
 {
@@ -60,7 +60,7 @@ class ArticlesRepository extends Repository
                 $obj->max = $str."_max.png";
                 $obj->path = $str.".png";
 
-              /*  $img = Image::make($image);
+                $img = Image::make($image);
                 $img->fit(Config::get('settings.image')['width'],
                     Config::get('settings.image')['height'])->save(public_path().'/'.env('THEME').'/images/articles/'.$obj->path);
 
@@ -69,7 +69,6 @@ class ArticlesRepository extends Repository
 
                 $img->fit(Config::get('settings.articles_img')['mini']['width'],
                     Config::get('settings.articles_img')['mini']['height'])->save(public_path().'/'.env('THEME').'/images/articles/'.$obj->mini);
-                */
 
                 $data['img'] = json_encode($obj);
 
@@ -118,7 +117,7 @@ class ArticlesRepository extends Repository
                 $obj->max = $str.'_max.jpg';
                 $obj->path = $str.'.jpg';
 
-                /*$img = Image::make($image);
+                $img = Image::make($image);
 
                 $img->fit(Config::get('settings.image')['width'],
                     Config::get('settings.image')['height'])->save(public_path().'/'.env('THEME').'/images/articles/'.$obj->path);
@@ -128,7 +127,7 @@ class ArticlesRepository extends Repository
 
                 $img->fit(Config::get('settings.articles_img')['mini']['width'],
                     Config::get('settings.articles_img')['mini']['height'])->save(public_path().'/'.env('THEME').'/images/articles/'.$obj->mini);
-                */
+
                 $data['img'] = json_encode($obj);
             }
         }

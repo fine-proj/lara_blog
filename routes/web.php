@@ -50,4 +50,6 @@ Route::group(['prefix'=>'admin', 'as' => 'admin.', 'middleware'=>'auth'], functi
     Route::get('/', ['uses'=>'Admin\IndexController@index', 'as' => 'adminIndex' ]);
     //маршруты, работающие со статьями в админке localhost/admin/articles...
     Route::resource('/articles', 'Admin\ArticlesController');
+    //маршруты, работающие с ролями в админке localhost/admin/permissions...
+    Route::resource('/permissions', 'Admin\PermissionsController');
 });

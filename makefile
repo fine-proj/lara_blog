@@ -1,5 +1,5 @@
 docker_name = my-php-fpm
-docker_image = laravel_skeleton:5.5
+docker_image = lbold_php-fpm
 
 help: #prints list of commands
 	@cat ./makefile | grep : | grep -v "grep"
