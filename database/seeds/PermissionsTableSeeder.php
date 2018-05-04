@@ -35,5 +35,11 @@ class PermissionsTableSeeder extends Seeder
         factory(Permission::class)->create([
             'name' =>  'EDIT_USERS',
         ]);
+        factory(Permission::class)->create([
+            'name' =>  'VIEW_ADMIN_MENU',
+        ]);
+        factory(Permission::class)->create([
+            'name' =>  'EDIT_MENU',
+        ]);
     }
 }
