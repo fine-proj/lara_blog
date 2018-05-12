@@ -2,6 +2,8 @@
 
 namespace Corp\Http\Controllers\Admin;
 
+use Corp\Category;
+use Corp\Http\Requests\MenusRequest;
 use Corp\Repositories\ArticlesRepository;
 use Corp\Repositories\MenusRepository;
 use Corp\Repositories\PortfoliosRepository;
@@ -67,7 +69,47 @@ class MenusController extends AdminController
      */
     public function create()
     {
-        //
+        $this->title = 'Добавить новый пункт';
+        $menu = $this->getUsersMenus()->roots();
+
+        $resultMenu = $menu->reduce(function($returnMenus, $item){
+            $returnMenus[$item->id] = $item->title;
+            return $returnMenus;
+        }, ['0'=>'Родительский элемент']);
+
+        $categories = \Corp\Category::select(['title','alias','parent_id','id'])->get();
+        $listCat['0'] = 'Не используется';
+        $listCat['parent'] = 'Раздел блог';
+        foreach ($categories as $category)
+        {
+            if($category->parent_id ==0){
+                $listCat[$category->title] = [];
+            }
+            else{
+                $rootCategory = $categories->where('id',$category->parent_id)->first()->title;
+                $listCat[$rootCategory][$category->alias] = $category->title;
+            }
+        }
+
+        $articles = $this->a_rep->get(['id','title','alias']);
+        $articles = $articles->reduce(function ($returnArticles, $article) {
+            $returnArticles[$article->alias] = $article->title;
+            return $returnArticles;
+        }, []);
+
+        $filters = \Corp\Filter::select('id','title','alias')->get()->reduce(function ($returnFilters, $filter) {
+            $returnFilters[$filter->alias] = $filter->title;
+            return $returnFilters;
+        }, ['parent' => 'Раздел портфолио']);
+
+        $portfolios = $this->p_rep->get(['id','alias','title'])->reduce(function ($returnPortfolios, $portfolio) {
+            $returnPortfolios[$portfolio->alias] = $portfolio->title;
+            return $returnPortfolios;
+        }, []);
+
+        $this->content = view(env('THEME').'.admin.menus_create_content')->with(['menus'=>$resultMenu,'categories'=>$listCat,'articles'=>$articles,'filters' => $filters,'portfolios' => $portfolios])->render();
+
+        return $this->renderOutput();
     }
 
     /**
@@ -76,9 +118,14 @@ class MenusController extends AdminController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MenusRequest $request)
     {
-        //
+        $result = $this->m_rep->addMenu($request);
+        if(is_array($result) && !empty($result['error'])){
+            return back()->with($result);
+        }
+
+        return redirect('/admin')->with($result);
     }
 
     /**

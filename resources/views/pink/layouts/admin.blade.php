@@ -18,9 +18,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="{{ asset(env('THEME')) }}/css/style-minifield.css" /> <!-- MAIN THEME STYLESHEET -->
     <link rel="stylesheet" type="text/css" media="all" href="{{ asset(env('THEME')) }}/css/buttons.css" /> <!-- MAIN THEME STYLESHEET -->
     <link rel="stylesheet" type="text/css" media="all" href="{{ asset(env('THEME')) }}/css/cache-custom.css" /> <!-- MAIN THEME STYLESHEET -->
-    <link rel="stylesheet" type="text/css" media="all" href="{{ asset(env('THEME')) }}/css/cache-custom.css" /> <!-- MAIN THEME STYLESHEET -->
-
-
+    <link rel="stylesheet" type="text/css" media="all" href="{{ asset(env('THEME')) }}/css/jquery-ui.css" />
 
 
     <!-- FONTs -->
@@ -28,9 +26,12 @@
     <link rel='stylesheet' href='{{ asset(env('THEME')) }}/css/font-awesome.css' type='text/css' media='all' />
 
     <!-- JAVASCRIPTs -->
-    <script type="text/javascript" src="{{ asset(env('THEME')) }}/js/jquery.js"></script>
+    <script type="text/javascript" src="{{ asset(env('THEME')) }}/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="{{ asset(env('THEME')) }}/js/jquery-ui.js"></script>
     <script type="text/javascript" src="{{ asset(env('THEME')) }}/js/ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="{{ asset(env('THEME')) }}/js/bootstrap-filestyle.min.js"></script>
+
+
 
 
 </head>
@@ -39,6 +40,8 @@
 <!-- START BODY -->
 
 <body class="no_js responsive {{ (Route::currentRouteName() == 'home') ? 'page-template-home-php' : ''}} stretched">
+
+
 
 <!-- START BG SHADOW -->
 <div class="bg-shadow">
