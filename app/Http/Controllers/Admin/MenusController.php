@@ -145,9 +145,80 @@ class MenusController extends AdminController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(\Corp\Menu $punkt_menu)
     {
-        //
+        $this->title = 'Редактирование пункта ' . $punkt_menu->title;
+
+        $type = false;
+        $option = false;
+
+        $route = app('router')->getRoutes()->match(app('request')->create($punkt_menu->path));
+        $aliasRoute = $route->getName();
+        $parameters = $route->parameters();
+
+        if($aliasRoute == 'articles.index' || $aliasRoute == 'articlesCat') {
+            $type = 'blogLink';
+            $option = isset($parameters['cat_alias']) ? $parameters['cat_alias'] : 'parent';
+        }
+        else if($aliasRoute == 'articles.show') {
+            $type = 'blogLink';
+            $option = isset($parameters['alias']) ? $parameters['alias'] : '';
+
+        }
+        else if($aliasRoute == 'portfolios.index') {
+            $type = 'portfolioLink';
+            $option = 'parent';
+
+        }
+        else if($aliasRoute == 'portfolios.show') {
+            $type = 'portfolioLink';
+            $option = isset($parameters['alias']) ? $parameters['alias'] : '';
+
+        }
+        else {
+            $type = 'customLink';
+        }
+
+        $menu = $this->getUsersMenus()->roots();
+
+        $resultMenu = $menu->reduce(function($returnMenus, $item){
+            $returnMenus[$item->id] = $item->title;
+            return $returnMenus;
+        }, ['0'=>'Родительский элемент']);
+
+        $categories = \Corp\Category::select(['title','alias','parent_id','id'])->get();
+        $listCat['0'] = 'Не используется';
+        $listCat['parent'] = 'Раздел блог';
+        foreach ($categories as $category)
+        {
+            if($category->parent_id ==0){
+                $listCat[$category->title] = [];
+            }
+            else{
+                $rootCategory = $categories->where('id',$category->parent_id)->first()->title;
+                $listCat[$rootCategory][$category->alias] = $category->title;
+            }
+        }
+
+        $articles = $this->a_rep->get(['id','title','alias']);
+        $articles = $articles->reduce(function ($returnArticles, $article) {
+            $returnArticles[$article->alias] = $article->title;
+            return $returnArticles;
+        }, []);
+
+        $filters = \Corp\Filter::select('id','title','alias')->get()->reduce(function ($returnFilters, $filter) {
+            $returnFilters[$filter->alias] = $filter->title;
+            return $returnFilters;
+        }, ['parent' => 'Раздел портфолио']);
+
+        $portfolios = $this->p_rep->get(['id','alias','title'])->reduce(function ($returnPortfolios, $portfolio) {
+            $returnPortfolios[$portfolio->alias] = $portfolio->title;
+            return $returnPortfolios;
+        }, []);
+
+        $this->content = view(env('THEME').'.admin.menus_create_content')->with(['menu'=>$punkt_menu, 'type'=>$type, 'option'=>$option ,'menus'=>$resultMenu,'categories'=>$listCat,'articles'=>$articles,'filters' => $filters,'portfolios' => $portfolios])->render();
+
+        return $this->renderOutput();
     }
 
     /**
@@ -157,9 +228,14 @@ class MenusController extends AdminController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, \Corp\Menu $punkt_menu)
     {
-        //
+        $result = $this->m_rep->updateMenu($request, $punkt_menu);
+        if(is_array($result) && !empty($result['error'])){
+            return back()->with($result);
+        }
+
+        return redirect('/admin')->with($result);
     }
 
     /**
@@ -168,8 +244,13 @@ class MenusController extends AdminController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(\Corp\Menu $punkt_menu)
     {
-        //
+        $result = $this->m_rep->deleteMenu($punkt_menu);
+        if(is_array($result) && !empty($result['error'])){
+            return back()->with($result);
+        }
+
+        return redirect('/admin')->with($result);
     }
 }

@@ -1,7 +1,9 @@
 <div id="content-page" class="content group" style="width: 80%">
     <div class="hentry group">
 
-        {!! Form::open(['url' => (isset($menu->id)) ? route('admin.menus.update',['menus'=>$menu->id]) : route('admin.menus.store'),'class'=>'contact-form','method'=>'POST','enctype'=>'multipart/form-data']) !!}
+        {!! Form::open(['url' => (isset($menu->id)) ? route('admin.menus.update',['menus'=>$menu->id]) :
+                                 route('admin.menus.store'),
+                                 'class'=>'contact-form','method'=>'POST','enctype'=>'multipart/form-data']) !!}
 
         <ul>
 
@@ -34,7 +36,8 @@
 
         <div id="accordion">
 
-            <h3>{!! Form::radio('type', 'customLink',(isset($type) && $type == 'customLink') ? TRUE : FALSE,['class' => 'radioMenu']) !!}
+            <h3>{!! Form::radio('type', 'customLink',(isset($type) && $type == 'customLink') ? TRUE : FALSE,
+                                                    ['class' => 'radioMenu']) !!}
                 <span class="label">Пользовательская ссылка:</span></h3>
 
             <ul>
@@ -53,7 +56,8 @@
             </ul>
 
 
-            <h3>{!! Form::radio('type', 'blogLink',(isset($type) && $type == 'blogLink') ? TRUE : FALSE,['class' => 'radioMenu']) !!}
+            <h3>{!! Form::radio('type', 'blogLink',(isset($type) && $type == 'blogLink') ? TRUE : FALSE,
+                                                   ['class' => 'radioMenu']) !!}
                 <span class="label">Раздел Блог:</span></h3>
 
             <ul>
@@ -80,7 +84,8 @@
                         <span class="sublabel">Ссылка на материал блога</span><br />
                     </label>
                     <div class="input-prepend">
-                        {!! Form::select('article_alias', $articles, (isset($option) && $option) ? $option :FALSE, ['placeholder' => 'Не используется']) !!}
+                        {!! Form::select('article_alias', $articles, (isset($option) && $option) ? $option :FALSE,
+                                                                        ['placeholder' => 'Не используется']) !!}
 
                     </div>
 
@@ -90,7 +95,8 @@
 
 
 
-            <h3>{!! Form::radio('type', 'portfolioLink',(isset($type) && $type == 'portfolioLink') ? TRUE : FALSE,['class' => 'radioMenu']) !!}
+            <h3>{!! Form::radio('type', 'portfolioLink',(isset($type) && $type == 'portfolioLink') ? TRUE : FALSE,
+                                                        ['class' => 'radioMenu']) !!}
                 <span class="label">Раздел портфолио:</span></h3>
 
             <ul>
@@ -102,7 +108,8 @@
                         <span class="sublabel">Ссылка на запись портфолио</span><br />
                     </label>
                     <div class="input-prepend">
-                        {!! Form::select('portfolio_alias', $portfolios, (isset($option) && $option) ? $option :FALSE, ['placeholder' => 'Не используется']) !!}
+                        {!! Form::select('portfolio_alias', $portfolios, (isset($option) && $option) ? $option :FALSE,
+                                                                            ['placeholder' => 'Не используется']) !!}
 
                     </div>
 
@@ -115,7 +122,8 @@
                         <span class="sublabel">Портфолио</span><br />
                     </label>
                     <div class="input-prepend">
-                        {!! Form::select('filter_alias', $filters, (isset($option) && $option) ? $option :FALSE, ['placeholder' => 'Не используется']) !!}
+                        {!! Form::select('filter_alias', $filters, (isset($option) && $option) ? $option :FALSE,
+                                                                    ['placeholder' => 'Не используется']) !!}
 
                     </div>
 
@@ -161,11 +169,21 @@
 
         });
 
+        let active = 0;
+        $('#accordion input[type=radio]').each(function(ind,it) {
+
+            if($(this).prop('checked')) {
+                active = ind;
+            }
+
+        });
+
+        $('#accordion').accordion('option','active', active);
+
     });
 
-    $(document).ready(function(){
+   /* $(document).ready(function(){
         $('#accordion').find('input[type=radio]').first().prop('checked',true);
-    });
-
+    });*/
 </script>
 
