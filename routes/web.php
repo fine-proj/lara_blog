@@ -52,4 +52,6 @@ Route::group(['prefix'=>'admin', 'as' => 'admin.', 'middleware'=>'auth'], functi
     Route::resource('/articles', 'Admin\ArticlesController');
     //маршруты, работающие с ролями в админке localhost/admin/permissions...
     Route::resource('/permissions', 'Admin\PermissionsController');
+    //маршруты, работающие с меню в админке localhost/admin/menus...
+    Route::resource('/menus', 'Admin\MenusController');
 });

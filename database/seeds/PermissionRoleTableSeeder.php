@@ -42,5 +42,13 @@ class PermissionRoleTableSeeder extends Seeder
             'role_id' =>  '1',
             'permission_id' =>  '7',
         ]);
+        factory(PermissionRoleRelation::class)->create([
+            'role_id' =>  '1',
+            'permission_id' =>  '8',
+        ]);
+        factory(PermissionRoleRelation::class)->create([
+            'role_id' =>  '1',
+            'permission_id' =>  '9',
+        ]);
     }
 }
