@@ -18,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
         'Corp\Article' => 'Corp\Policies\ArticlePolicy',
         'Corp\Permission' => 'Corp\Policies\PermissionPolicy',
         'Corp\Menu' => 'Corp\Policies\MenusPolicy',
+        'Corp\User' => 'Corp\Policies\UsersPolicy',
     ];
 
     /**
@@ -47,6 +48,11 @@ class AuthServiceProvider extends ServiceProvider
         $gate->define('VIEW_ADMIN_MENU', function (User $user){
 
             return $user->canDo('VIEW_ADMIN_MENU');
+        });
+
+        $gate->define('EDIT_USERS', function (User $user){
+
+            return $user->canDo('EDIT_USERS');
         });
     }
 }
