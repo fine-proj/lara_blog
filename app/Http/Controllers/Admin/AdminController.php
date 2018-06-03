@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Corp\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Lavary\Menu\Facade as Menu;
+use Illuminate\Support\Facades\Gate;
 
 class AdminController extends \Corp\Http\Controllers\Controller
 {
@@ -45,7 +46,7 @@ class AdminController extends \Corp\Http\Controllers\Controller
         $this->vars['title'] = $this->title;
 
         $menu = $this->getMenu();
-        $navigation = view(env('THEME').'.admin.navigation')->with('menu',$menu)->render();
+        $navigation = view(config('settings.theme').'.admin.navigation')->with('menu',$menu)->render();
         $this->vars['navigation'] = $navigation;
 
         if($this->content) {
@@ -60,11 +61,13 @@ class AdminController extends \Corp\Http\Controllers\Controller
 
     protected function getMenu(){
         return Menu::make('adminMenu', function($m){
-            $m->add('Статьи', ['route'=>'admin.articles.index']);
+            if(Gate::allows('VIEW_ADMIN_ARTICLES')) {
+                $m->add('Статьи', ['route' => 'admin.articles.index']);
+            }
 
             $m->add('Портфолио', ['route'  => 'admin.articles.index']);
             $m->add('Меню',  ['route'  => 'admin.menus.index']);
-            $m->add('Пользователи',  ['route'  => 'admin.articles.index']);
+            $m->add('Пользователи',  ['route'  => 'admin.users.index']);
             $m->add('Привилегии',  ['route'  => 'admin.permissions.index']);
         });
     }
